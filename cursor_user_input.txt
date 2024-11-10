@@ -1,0 +1,42 @@
+
+set serveroutput on;
+ 
+declare 
+
+v_name o_roll_tab.name%type;
+v_count number;
+v_roll number;
+cursor c_stdt(p_roll number) is select roll,name from o_roll_tab where roll=p_roll;
+begin
+  dbms_output.put_line('enter roll no');
+    v_roll:=&roll;
+   
+   
+   open c_stdt(v_roll);
+   fetch c_stdt into v_roll,v_name;
+ if c_stdt%found then
+   select count(*) into v_count from n_roll_tab  where roll=v_roll;
+   if v_count=0 then
+      insert into n_roll_tab values(v_roll,v_name);
+     dbms_output.put_line('inserted roll number'|| v_roll ||'  into n_roll_tab');
+  else
+          dbms_output.put_line(v_roll||'  already present');
+  end if;
+
+ else
+ dbms_output.put_line('no student found with roll number  '||v_roll||'   from old-table');
+ end if;
+close c_stdt;
+
+
+exception
+
+when others then
+dbms_output.put_line('an error occured');
+end;
+
+/
+
+
+
+ 

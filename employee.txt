@@ -1,0 +1,59 @@
+create table employee(
+emp_id number(6),
+emp_name varchar2(15),
+salary number(20)
+);
+
+
+
+create table tracking
+(
+emp_id number(6),
+salary number(20)
+);
+
+
+set serveroutput on;
+create or replace trigger emptrigg 
+after insert  on employee
+for each row
+begin
+ if :new.salary<50000 then
+ insert into tracking(emp_id,salary)
+values(:new.emp_id,:new.salary);
+end if;
+end;
+/
+
+create or replace trigger emptrigg2 
+after update  on employee
+for each row
+begin
+ if :new.salary<50000 then
+ insert into tracking(emp_id,salary)
+values(:new.emp_id,:new.salary);
+end if;
+end;
+/
+
+insert into employee(emp_id,emp_name,salary) values(11,'jaya',55000);
+insert into employee(emp_id,emp_name,salary) values(12,'soniya',59000);
+insert into employee(emp_id,emp_name,salary) values(14,'niya',35000);
+insert into employee(emp_id,emp_name,salary) values(15,'maya',55000);
+insert into employee(emp_id,emp_name,salary) values(16,'kavya',44000);
+
+update employee
+set salary=45000
+where emp_id=12;
+
+update employee
+set salary=55000
+where emp_id=14;
+insert into employee(emp_id,emp_name,salary) values(18,'jiya',35000);
+insert into employee(emp_id,emp_name,salary) values(28,'geneliya',65000);
+insert into employee(emp_id,emp_name,salary) values(20,'suraj',50000);
+
+
+
+select * from employee;
+select * from tracking;

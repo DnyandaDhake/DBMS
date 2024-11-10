@@ -1,0 +1,47 @@
+ create table account(acc_no integer(10) auto_increment primary key, branch_name varchar(20),balance integer(10));
+create table branch(branch_name varchar(20), branch_city varchar(20),assets integer(10),primary key(branch_name));
+ create table customer(cust_name varchar(20) primary key, cust_street varchar(20),cust_city varchar(10));
+create table depositor(cust_name varchar(20),acc_no integer(10),foreign key(cust_name) references customer(cust_name),foreign key(acc_no) references account(acc_no));
+ create table borrower(cust_name varchar(20),loan_no integer(10));
+create table loan(loan_no integer(10),branch_name varchar(20),amount integer(10));
+alter table loan add primary key(loan_no);
+alter table borrower add foreign key(loan_no) references loan(loan_no);
+
+alter table account add foreign key(branch_name) references branch(branch_name);
+
+ select distinct branch_name from loan;
+
+select loan_no from loan where branch_name="wadia_college";
+
+ select Borrower.cust_name,loan.loan_no,amount from loan join borrower on borrower.loan_no=loan.loan_no;
+
+select Borrower.cust_name from borrower join loan on borrower.loan_no=loan.loan_no where branch_name="wadia_college" order by cust_name asc;
+
+ select distinct branch_city from branch;
+
+select depositor.cust_name from depositor join borrower on depositor.cust_name=borrower.cust_name;
+
+ select depositor.cust_name from depositor left join borrower on depositor.cust_name=borrower.cust_name where borrower.cust_name is NUll;
+
+select avg(balance) from account where branch_name="wadia_college";
+
+select branch_name,count(cust_name) from depositor join account where account.acc_no=depositor.acc_no group by branch_name;
+
+select branch_name,avg(balance) from account group by branch_name having avg(balance)>15000;
+
+delete from borrower where loan_no in(select loan_no from loan where amount between 13000 and 68000);
+ delete from loan where amount between 13000 and 68000;
+
+create view view_1 as select cust_name from borrower where loan_no in(select loan_no from  loan where branch_name="wadia_college");
+
+create view view_2 as select depositor.acc_no,borrower.loan_no from depositor join borrower on depositor.cust_name=borrower.cust_name;
+
+ insert into depositor values("nisha",17);
+
+ update depositor
+    set cust_name="rita"
+    where acc_no=12;
+delete from borrower where loan_no=1;
+ create index id_acc_no on account(acc_no);
+ create unique index id_uniacc_no on account(acc_no);
+show index from account;

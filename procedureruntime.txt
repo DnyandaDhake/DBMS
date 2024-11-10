@@ -1,0 +1,56 @@
+ create table stumarks( roll integer,name varchar2(20),marks number(10));
+insert into stumarks values(1,'maya',950);
+
+
+
+ insert into stumarks values(3,'maryaa',1150);
+
+
+
+ insert into stumarks values(2,'kavyaa',1400);
+
+
+
+ insert into stumarks values(4,'nishta',1252);
+
+
+
+ insert into stumarks values(6,'krupa',1452);
+
+
+
+ insert into stumarks values(7,'mohini',1752);
+
+
+create table stresult(roll integer,name varchar2(20),grade varchar2(10));
+create or replace procedure stud_pro(var_roll in number,p_roll out stumarks.roll%type,p_name out stumarks.name%type,p_total out stumarks.marks%type)
+    as
+    begin
+    select roll,name,marks into p_roll,p_name,p_total from stumarks where roll=var_roll;
+    if p_total<=1500 and p_total>=990 then
+    insert into stresult values( p_roll,p_name,'distinction');
+    elsif p_total<=989 and p_total>=900 then
+    insert into stresult values( p_roll,p_name,'First Class');
+   elsif p_total<=899 and p_total>=825 then
+   insert into stresult values( p_roll,p_name,'Higher second Class');
+   else
+   insert into stresult values( p_roll,p_name,'fail');
+   end if;
+  exception
+   when no_data_found then
+ dbms_output.put_line('data not found');
+   when others then
+   dbms_output.put_line('An error occured');
+  end;
+   /
+
+declare
+   var_roll integer;
+    p_roll stumarks.roll%type;
+    p_name stumarks.name%type;
+    p_total stumarks.marks%type;
+   begin
+    var_roll:=&var_roll;
+    stud_pro(var_roll,p_roll,p_name,p_total);
+    end;
+   /

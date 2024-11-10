@@ -1,0 +1,104 @@
+db.emp.insertMany([
+{
+emp_id:101,
+Name:{fname:"jaya",
+              lname:"patil"},
+comp_name:"tcs",
+salary:50000,
+designation: "manager",
+age:25,
+expertise:["java","python"],
+Dob:"1996/09/05",
+email:"jayap_286@gmail.com",
+contact:96578242,
+Address:[{p_addr:{city:"pune",pincode:411012}},{l_addr:{city:"mumbai",pincode:411578}}]
+},
+{
+emp_id:102,
+Name:{fname:"maya",
+              lname:"sonawane"},
+comp_name:"tcs",
+salary:35000,
+designation: "engineer",
+age:22,
+expertise:["java","python"],
+Dob:"1996/06/04",
+email:"mayasonw_286@gmail.com",
+contact:96458242,
+Address:[{p_addr:{city:"jalgaon",pincode:420401}},{l_addr:{city:"mumbai",pincode:411558}}]
+},
+{emp_id:103,
+Name:{fname:"kavya",
+              lname:"patil"},
+comp_name:"wipro",
+salary:65000,
+designation: "manager",
+age:45,
+expertise:["java","python","c++"],
+Dob:"1980/09/15",
+email:"kavya#286@gamil.com",
+contact:66578242,
+Address:[{p_addr:{city:"pune",pincode:411012}},{l_addr:{city:"pune",pincode:411001}}]
+},
+{
+emp_id:106,
+Name:{fname:"radhi",
+              lname:"nene"},
+comp_name:"accenture",
+salary:55000,
+designation: "developer",
+age:25,
+expertise:["html","python"],
+Dob:"1998/01/06",
+email:"radhi10289@gmail.com",
+contact:96578242,
+Address:[{p_addr:{city:"nagpur",pincode:446045}},{l_addr:{city:"pune",pincode:411033}}]
+},
+{
+emp_id:109,
+Name:{fname:"mahi",
+              lname:"subhedar"},
+comp_name:"nextra",
+salary:40000,
+designation: "dba",
+age:25,
+expertise:["mysql","mongodb"],
+Dob:"1986/12/05",
+email:"subhedarmhi2908@gmail.com",
+contact:96578245628,
+Address:[{p_addr:{city:"pune",pincode:411012}},{l_addr:{city:"mumbai",pincode:411578}}]
+},
+{
+emp_id:110,
+Name:{fname:"niya",
+              lname:"sharma"},
+comp_name:"amdocs",
+salary:50000,
+designation: "tester",
+age:36,
+expertise:["spm","agile"],
+Dob:"1986/09/05",
+email:"shrmamniya286@gmail.com",
+contact:756578242,
+Address:[{p_addr:{city:"pune",pincode:411012}},{l_addr:{city:"nashik",pincode:415223}}]
+}
+]
+
+
+db.emp.find({designation:"programmer",salary:{$gt:30000}})
+
+db.emp.update({designation:"tester",comp_name:"tcs"},
+                           {$set:{age:25}},{upsert:true});
+db.emp.update({comp_name:"infosys"},{$inc:{salary:10000}},{multi:true});
+db.emp.update({comp_name:"tcs"},{$inc:{salary:-5000}},{multi:true});
+db.emp.find({designation:{$ne:"tester"}});
+ db.emp.find({expertise:["java","python"]});
+db.emp.find({age:{$lt:30},salary:{$gt:50000}},{_id:0,Name:1});
+ db.emp.find({$or:[{age:{$lt:30}},{salary:{$gt:40000}}]});
+db.emp.find({},{_id:0,Name:1});
+
+db.emp.find({"Address.p_addr.city":"pune","Address.p_addr.pincode":411012})
+db.emp.find({$or:[{designation:"developer"},{designation:"tester"}]})
+db.emp.find({designation:{$in:["developer","tester"]}})
+db.emp.deleteOne({designation:"manager"})
+db.emp.count()

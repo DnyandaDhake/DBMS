@@ -1,0 +1,66 @@
+var mapfunction1=function()
+{
+  emit(this.comp_name,this.salary);
+ };
+var reducefunction1=function(keycomp_name,valuessalary)
+{
+return Array.sum(valuessalary);
+};
+db.emp.mapReduce(mapfunction1,
+reducefunction1,
+{out:"map_reduce_table"}
+)
+
+var mapfunction1=function()
+{
+ if(this.comp_name=="tcs"){
+emit(this.comp_name,this.salary);}
+};
+ var reducefunction1=function(keycomp_name,valuessalary)
+{
+return Array.sum(valuessalary);
+}
+
+db.emp.mapReduce(mapfunction1,reducefunction1,
+{out:"map_reduce_table"}
+)
+
+
+
+  var mapfunction1=function()
+{
+ if("Address.l_addr.city"==='pune' || " Address.p_addr.city"==='pune')
+{
+ emit(this.comp_name,this.salary);
+}
+};
+
+var reducefunction2=function(keycomp_name,valuessalary)
+{
+ return Array.avg(valuessalary);
+}
+
+db.emp.mapReduce(
+mapfunction1,
+reducefunction2,
+{out:"map_reduce_table"}
+)
+
+var mapfunction=function()
+{
+if(this.comp_name==="amazon" && this.age>40){
+ emit("stor_count",1);
+}
+};
+
+var reducefunction=function(keycomp_name,valuesage)
+{
+  return Array.count(values);
+};
+
+db.employee.mapReduce(
+mapfunction,
+reducefunction,
+{out:"stor_count"}
+)
+

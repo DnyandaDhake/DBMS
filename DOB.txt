@@ -1,0 +1,31 @@
+create or replace function age_calc(p_dob in date,p_month out number,p_days out integer)
+    return number is
+    v_today date :=sysdate;
+    v_months number:=0;
+    v_years number:=0;
+    v_days integer:=0;
+    begin
+    v_years:=trunc(months_between(v_today,p_dob)/12);
+   v_months:=trunc(months_between(v_today,p_dob)-(v_years*12));
+   v_days:=v_today-add_months(p_dob,v_years*12+v_months);
+   p_month:=v_months;
+   p_days:=v_days;
+   return v_years;
+   end age_calc;
+   /
+
+accept user_dob char prompt 'enter dob (yyyy-mm-dd)';
+--enter dob (yyyy-mm-dd)
+
+set serveroutput on;
+declare
+  v_years number;
+   v_months number;
+   v_days integer;
+
+   begin
+
+   v_years:=age_calc(to_date('&user_dob','yyyy-mm-dd'),v_months,v_days);
+    dbms_output.put_line('your age is  '||v_years||'years '||v_months ||'months  '||v_days||'days');
+    end;
+   /

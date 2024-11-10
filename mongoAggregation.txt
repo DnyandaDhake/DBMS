@@ -1,0 +1,35 @@
+db.emp.aggregate({$group:{_id:"$designation",totalsal:{$sum:"$salary"}}},{$match:{totalsal:{$gt:20000}}})
+
+ db.emp.aggregate({$match:{designation:"programmer"}},{$group:{_id:"$Address.l_addr.city",totalsal:{$sum:"$salary"}}}) ;
+
+db.emp.aggregate([{$project:{Name:{$toUpper:{$concat:["$Name.fname"," ","$Name.lname"]}},_id:1}},{$sort:{Name:1}}])
+db.emp.aggregate([{$group:{_id:"$designation",avgsal:{$avg:"$salary"}}},{$sort:{avgsal:1}}])
+
+ db.emp.aggregate([{$group:{_id:null,count:{$sum:1}}}])
+db.emp.aggregate({$unwind:"$expertise"})
+
+db.emp.aggregate({$unwind:"$expertise"},{$match:{"Name.fname":"komal"}})
+
+db.emp.aggregate({$unwind:"$expertise"},{$group:{_id:"$expertise",number:{$sum:1}}})
+
+db.emp.aggregate([{$group:{_id:"$comp_name",min:{$min:"$salary"},max:{$max:"$salary"}}}])
+
+db.emp.aggregate([{$match:{"Address.p_addr.city":"pune"}},{$group:{_id:"$Address.p_addr.city",array:{$push:"$designation"}}}]);
+
+ db.emp.find({emp_id:112}).explain("executionStats")
+db.emp.createIndex({emp_id:1})
+ db.emp.find({emp_id:112}).explain("executionStats")
+
+var users = [];
+for (var i = 0; i < 1000; i++) {
+    users.push({
+        "i": i,
+        "username": "user" + i,
+        "age": Math.floor(Math.random() * 120),
+        "created": new Date()
+    });
+}
+db.user.insertMany(users);
+
+
+db.user.find({username:"user0"}).explain("executionStats")

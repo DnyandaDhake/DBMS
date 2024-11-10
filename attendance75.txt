@@ -1,0 +1,34 @@
+create table student(roll number(10),attendance number(10),status varchar2(26));
+
+alter table student add  name varchar(20);
+insert into student(roll,name,attendance)values(6,'apurva',76);
+
+set serveroutput on;
+declare
+v_roll student.roll%type;
+--v_name student.name%type;
+v_attendance student.attendance%type;
+v_status student.status%type;
+begin
+v_roll:=&Roll;
+select roll,attendance into v_roll,v_attendance from student
+where roll=v_roll;
+if v_attendance<75 then
+ v_status:='Detained';
+update student
+set status=v_status
+where roll=v_roll;
+else 
+v_status:='Not detained';
+update student
+set  status=v_status
+where roll=v_roll;
+end if;
+commit;
+exception
+when no_data_found then
+ dbms_output.put_line('roll no not occured in table');
+when others then
+dbms_output.put_line('An error occured');
+end;
+/

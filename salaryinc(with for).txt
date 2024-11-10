@@ -1,0 +1,64 @@
+1 ST METHOD
+SET SERVEROUTPUT ON;
+
+DECLARE
+    v_avg_sal   NUMBER(10);  
+BEGIN
+    
+    SELECT AVG(salary) 
+    INTO v_avg_sal
+    FROM emp;
+
+
+    INSERT INTO increment_salary (emp_no, salary)
+    SELECT emp_no, salary * 1.10  
+    FROM emp
+    WHERE salary < v_avg_sal; 
+
+   
+    COMMIT;
+
+   
+    DBMS_OUTPUT.PUT_LINE('The average salary is: ' || v_avg_sal);
+    
+EXCEPTION
+    WHEN OTHERS THEN
+        
+        DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+        ROLLBACK; 
+END;
+/
+
+
+
+2ND METHOD
+
+set serveroutput on
+declare 
+v_avg_sal number(10);
+v_emp_no emp.emp_no%type;
+v_salary emp.salary%type;
+v_newsalary number(10);
+begin
+select avg(salary)  into v_avg_sal from emp;
+
+for rec in(select emp_no,salary from emp where salary<v_avg_sal)loop
+v_emp_no:=rec.emp_no;
+v_salary:=rec.salary;
+v_newsalary:=v_salary*1.10;
+
+  
+insert into increment_salary(emp_no,salary) values(v_emp_no,v_newsalary);
+end loop;
+commit;
+
+exception
+when others then
+ dbms_output.put_line('an error occured'||sqlerrm);
+end;
+/
+
+
+
+
+

@@ -1,0 +1,145 @@
+//1
+var mapfunction1=function()
+{
+emit(this.comp_name,this.salary);};
+
+var reducefunction1=function(keycomp_name,valuessalary)
+{
+return Array.sum(valuessalary);
+};
+
+db.employee.mapReduce(
+mapfunction1,
+reducefunction1,
+{out:"map_reduce_eg"}
+)
+
+//2
+var mapfunction1=function()
+{
+ if(this.comp_name==="amazon"){
+  emit(this.comp_name,this.salary);}
+};
+
+var reducefunction=function(keycomp_name,valuessalary)
+{
+ return Array.sum(salary);
+}
+
+db.employee.mapReduce(
+mapfunction1,
+reducefunction1,
+{out:"map_reduce_eg"}
+)
+
+
+//3
+var mapfunction1=function()
+{
+ if(this.comp_name==="amazon"){
+  emit(this.desig,this.salary);}
+};
+
+var reducefunction=function(keydesig,valuessalary)
+{
+ return Array.sum(salary);
+}
+
+db.employee.mapReduce(
+mapfunction1,
+reducefunction1,
+{out:"map_reduce_eg"}
+)
+//4
+var mapfunction = function() {
+    this.address.forEach(function(addr) {
+        if ((addr.ladd && addr.ladd.city === "pune") || (addr.paddr && addr.paddr.city === "pune")) {
+            emit(this.desig, { sum: this.salary, count: 1 });
+        }
+    }, this);
+};
+
+var reducefunction = function(key, values) {
+    let result = { sum: 0, count: 0 };
+    values.forEach(function(value) {
+        result.sum += value.sum;
+        result.count += value.count;
+    });
+    return result;
+};
+
+db.employee.mapReduce(
+    mapfunction,
+    reducefunction,
+    {
+        out: "avg_salary_pune",
+        finalize: function(key, reducedValue) {
+            return reducedValue.count > 0 ? { average: reducedValue.sum / reducedValue.count, count: reducedValue.count } : { average: 0, count: 0 };
+        }
+    }
+);
+
+
+var reducefunction = function(key, values) {
+    let result = { sum: 0, count: 0 };
+    values.forEach(function(value) {
+        result.sum += value.sum;
+        result.count += value.count;
+    });
+    return result;
+};
+db.employee.mapReduce(
+    mapfunction,
+    reducefunction,
+    {
+        out: "avg_salary_pune",
+        finalize: function(key, reducedValue) {
+            return reducedValue.count > 0 ? { average: reducedValue.sum / reducedValue.count, count: reducedValue.count } : { average: 0, count: 0 };
+        }
+    }
+);
+
+//5
+var mapfunction=function()
+{
+if(this.comp_name==="amazon" && this.age>40){
+ emit("stor_count",1);
+}
+};
+
+var reducefunction=function(keycomp_name,valuesage)
+{
+  return Array.count(values);
+};
+
+db.employee.mapReduce(
+mapfunction,
+reducefunction,
+{out:"stor_count"}
+)
+
+//6
+db.employee.mapReduce(
+function() {
+         if (this.comp_name === "amazon" && this.age > 30) {
+            emit("Count_AP_Age_Greater_30", 1);
+         }
+    },
+     function(key, values) {
+        return Array.sum(values);
+     },
+   { out: "count_agegt" }
+)
+   
+
+db.employee.mapReduce(
+    function() {
+        if (this.comp_name === "amazon") {
+            emit("Count_AP", 1);
+        }
+    },
+    function(key, values) {
+        return Array.sum(values);
+    },
+    { out: "count_comp" }
+);

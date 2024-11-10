@@ -1,0 +1,45 @@
+set serveroutput on; 
+declare
+  v_roll borrowertab.roll%type;
+  v_bookname borrowertab.bookname%type;
+  v_dateissue borrowertab.dateissue%type;
+  v_status borrowertab.status%type;
+  v_returndate date:=trunc(sysdate);
+  v_fineamount number:=0;
+   v_overdue number;
+ book_not_found exception;
+begin
+dbms_output.put_line('enter roll no');
+v_roll:=&v_roll;
+dbms_output.put_line('Enter bookname');
+v_bookname:='&v_bookname';
+select dateissue,status into v_dateissue,v_status from borrowertab where roll=v_roll and bookname=v_bookname;
+   if v_status!='I' then
+     raise book_not_found;
+  end if;
+v_overdue:=trunc(v_returndate-v_dateissue);
+dbms_output.put_line('overdue days are  ' ||v_overdue);
+if v_overdue>15 and v_overdue<=30 then
+   v_fineamount:=(v_overdue-15)*5;
+elsif v_overdue>30 then
+     v_fineamount:=75+((v_overdue-30)*50);
+end if;
+update borrowertab
+set status='R'
+where roll=v_roll and bookname=v_bookname;
+
+if v_fineamount>0 then
+   insert into finetab values(v_roll,v_bookname,v_returndate,v_fineamount);
+
+end if;
+
+exception
+when no_data_found then
+   dbms_output.put_line('No data found for this roll no');
+when book_not_found then
+  dbms_output.put_line('book not found for or it is alreaayd returned'||v_roll);
+when others then
+  dbms_output.put_line('an error occurred'||sqlerrm);
+end;
+
+/

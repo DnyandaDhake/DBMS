@@ -1,0 +1,24 @@
+set serveroutput on
+declare 
+v_avg_sal number(10);
+v_emp_no emp.emp_no%type;
+v_salary emp.salary%type;
+v_newsalary number(10);
+begin
+select avg(salary)  into v_avg_sal from emp;
+
+for rec in(select emp_no,salary from emp where salary<v_avg_sal)loop
+v_emp_no:=rec.emp_no;
+v_salary:=rec.salary;
+v_newsalary:=v_salary*1.10;
+
+  
+insert into increment_salary(emp_no,salary) values(v_emp_no,v_newsalary);
+end loop;
+commit;
+
+exception
+when others then
+ dbms_output.put_line('an error occured'||sqlerrm);
+end;
+/

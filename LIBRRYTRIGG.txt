@@ -1,0 +1,110 @@
+create table library_tab
+(
+ book_id number(5),
+bname varchar2(19),
+price number(5)
+);
+insert into library_tab(book_id,bname,price)
+values(1,'atomic_habits',100);
+insert into library_tab(book_id,bname,price)
+values(3,'smile',100);
+insert into library_tab(book_id,bname,price)
+values(10,'mind',150);
+insert into library_tab(book_id,bname,price)
+values(6,'hamlet',120);
+create table library_audit
+(
+ book_id number(5),
+bname varchar2(19),
+price number(5),
+action varchar2(13)
+);
+
+set serveroutput on;
+create or replace trigger librbeforupdat
+after update on library_tab
+for each row
+begin
+insert into library_audit(book_id,bname,price,action)
+values(:old.book_id,:old.bname,:old.price,'update');
+end;
+/
+create or replace trigger librbefordelet
+after delete on library_tab
+for each row
+begin
+insert into library_audit(book_id,bname,price,action)
+values(:old.book_id,:old.bname,:old.price,'delete');
+end;
+/
+
+update library_tab
+set price=200
+where book_id=3;
+
+update library_tab
+set bname='positive'
+where book_id=6;
+
+delete from library_tab where book_id=1;
+
+select * from library_tab;
+select * from library_audit;
+
+
+
+create table library_tab
+(
+ book_id number(5),
+bname varchar2(19),
+price number(5)
+);
+insert into library_tab(book_id,bname,price)
+values(1,'atomic_habits',100);
+insert into library_tab(book_id,bname,price)
+values(3,'smile',100);
+insert into library_tab(book_id,bname,price)
+values(10,'mind',150);
+insert into library_tab(book_id,bname,price)
+values(6,'hamlet',120);
+create table library_audit
+(
+ book_id number(5),
+bname varchar2(19),
+price number(5),
+action varchar2(13)
+);
+
+set serveroutput on;
+create or replace trigger librbeforupdat
+after update on library_tab
+for each row
+begin
+insert into library_audit(book_id,bname,price,action)
+values(:old.book_id,:old.bname,:old.price,'update');
+end;
+/
+create or replace trigger librbefordelet
+after delete on library_tab
+for each row
+begin
+insert into library_audit(book_id,bname,price,action)
+values(:old.book_id,:old.bname,:old.price,'delete');
+end;
+/
+
+update library_tab
+set price=200
+where book_id=3;
+
+update library_tab
+set bname='positive'
+where book_id=6;
+
+delete from library_tab where book_id=1;
+
+select * from library_tab;
+select * from library_audit;
+
+
+
